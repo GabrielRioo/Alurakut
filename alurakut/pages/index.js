@@ -4,18 +4,47 @@ const Title = styled.h1`
   font-size: 50px;
   color: ${({ theme }) => theme.colors.primary};
 `
-const Box = styled.div `
+const Box = styled.div`
   background: #fff;
   border-radius: 8px;
-`; 
+`;
+
+const MainGrid = styled.main`
+  display: grid;
+  grid-gap: 10px;
+  padding: 16px;
+
+  @media(min-width: 860px) {
+    grid-template-areas: "profileArea welcomeArea profileRelationsArea"; 
+    grid-template-columns: 160px 618px 312px; 
+  }
+`;
 
 export default function Home() {
   return (
-    <main>
-      <Box>Imagem</Box>
-      <Box>Bem Vindos</Box>
-      <Box>Amigos</Box>
-    </main>
-  ) 
-  
+    <MainGrid>
+      <div style={{ gridArea: 'profileArea' }}>
+        <Box>
+          Imagem
+        </Box>
+      </div>
+
+      <div style={{ gridArea: 'welcomeArea' }}>
+        <Box>
+          Bem Vindos
+        </Box>
+      </div>
+
+      <div style={{ gridArea: 'profileRelationsArea' }}>
+        <Box>
+          Pessoas da Comunidade
+        </Box>
+
+        <Box>
+          Comunidades
+        </Box>
+      </div>
+    </MainGrid>
+  )
+
 }
