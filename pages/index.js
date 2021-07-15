@@ -49,7 +49,8 @@ export default function Home() {
             <form onSubmit={function handleCriaComunidade(e) {
               e.preventDefault()
 
-              comunidades.push('Alura Stars')
+              const comunidadesAtualizadas = [...comunidades, 'Alura Stars'];
+              setComunidades(comunidadesAtualizadas);
               console.log(comunidades);
             }}>
               <div>
