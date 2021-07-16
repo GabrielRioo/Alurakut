@@ -24,7 +24,10 @@ function ProfileSideBar(props) {
 }
 
 export default function Home() {
-  const [comunidades, setComunidades] = React.useState(['Alurakut']);
+  const [comunidades, setComunidades] = React.useState([{
+    title: 'Eu odeio acordar cedo',
+    image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg'
+  }]);
   console.log(comunidades);
   const githubUser = 'GabrielRioo';
   const pessoasFavoritas = ['peas', 'juunegreiros', 'omariosouto', 'rafaballerini', 'marcobrunodev']
@@ -48,8 +51,14 @@ export default function Home() {
 
             <form onSubmit={function handleCriaComunidade(e) {
               e.preventDefault()
+              const dadosDoForm = new FormData(e.target);
 
-              const comunidadesAtualizadas = [...comunidades, 'Alura Stars'];
+              const comunidade = {
+                titulo: dadosDoForm.get('title'),
+                imagem: dadosDoForm.get('image')
+              }
+
+              const comunidadesAtualizadas = [...comunidades, comunidade];
               setComunidades(comunidadesAtualizadas);
               console.log(comunidades);
             }}>
@@ -82,9 +91,9 @@ export default function Home() {
               {comunidades.map((itemAtual) => {
                 return (
                   <li>
-                    <a href={`/users/${itemAtual}`} key={itemAtual}>
-                      <img src={`http://placehold.it/300x300`} />
-                      <span>{itemAtual}</span>
+                    <a href={`/users/${itemAtual.title}`} key={itemAtual.title}>
+                      <img src={itemAtual.image} />
+                      <span>{itemAtual.title}</span>
                     </a>
                   </li>
                 )
