@@ -25,8 +25,9 @@ function ProfileSideBar(props) {
 
 export default function Home() {
   const [comunidades, setComunidades] = React.useState([{
+    id: '164654',
     title: 'Eu odeio acordar cedo',
-    image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg'
+    image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg',
   }]);
   console.log(comunidades);
   const githubUser = 'GabrielRioo';
@@ -87,13 +88,16 @@ export default function Home() {
 
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
           <ProfileRelationsBoxWrapper>
+          <h2 className="smallTitle"> Comunidades ({comunidades.length})</h2>
+
             <ul>
               {comunidades.map((itemAtual) => {
                 return (
-                  <li>
-                    <a href={`/users/${itemAtual.title}`} key={itemAtual.title}>
+                  <li key={itemAtual.id}>
+                    <a href={`/users/${itemAtual.title}`}>
                       <img src={itemAtual.image} />
                       <span>{itemAtual.title}</span>
+
                     </a>
                   </li>
                 )
@@ -106,8 +110,8 @@ export default function Home() {
             <ul>
               {pessoasFavoritas.map((itemAtual) => {
                 return (
-                  <li>
-                    <a href={`/users/${itemAtual}`} key={itemAtual}>
+                  <li key={itemAtual}>
+                    <a href={`/users/${itemAtual}`} >
                       <img src={`https://github.com/${itemAtual}.png`} />
                       <span>{itemAtual}</span>
                     </a>
