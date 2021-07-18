@@ -74,15 +74,16 @@ export default function Home() {
         setSeguidores(respostaCompleta);
       });
 
+    //API GraphQL
     fetch("https://graphql.datocms.com/", {
       method: "POST",
       headers: {
-        'Authorization': "35cadc1f638ee0c8cdcc0cc4bde82f",
-        "Content-Type": "application/json",
-        'Accept': "application/json",
+        'Authorization': '35cadc1f638ee0c8cdcc0cc4bde82f',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
       body: JSON.stringify({
-        "query": `query {
+        'query': `query {
         allCommunities {
           id
           title
@@ -96,10 +97,9 @@ export default function Home() {
       .then((response) => response.json())
       .then((respostaCompleta) => {
         const comunidadesVindasDoDato = respostaCompleta.data.allCommunities;
-        
+
         console.log(comunidadesVindasDoDato);
         setComunidades(comunidadesVindasDoDato);
-
       });
   }, []);
 
@@ -126,13 +126,29 @@ export default function Home() {
                 const dadosDoForm = new FormData(e.target);
 
                 const comunidade = {
-                  titulo: dadosDoForm.get("title"),
-                  imagem: dadosDoForm.get("image"),
+                  title: dadosDoForm.get("title"),
+                  imageUrl: dadosDoForm.get("image"),
+                  creatorSlug: githubUser,
                 };
 
-                const comunidadesAtualizadas = [...comunidades, comunidade];
-                setComunidades(comunidadesAtualizadas);
-                console.log(comunidades);
+                fetch("/api/comunidades", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(comunidade)
+                  
+                }).then(async (res) => {
+                  const dados = await res.json();
+                  console.log(dados.registroCriado);
+
+                  const comunidade = dados.registroCriado;
+
+                  const comunidadesAtualizadas = [...comunidades, comunidade];
+                  setComunidades(comunidadesAtualizadas);
+                });
+
+                // console.log(comunidades);
               }}
             >
               <div>
