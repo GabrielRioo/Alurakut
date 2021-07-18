@@ -53,14 +53,7 @@ function ProfileRelationsBox(props) {
 }
 
 export default function Home() {
-  const [comunidades, setComunidades] = React.useState([
-    {
-      id: "164654",
-      title: "Eu odeio acordar cedo",
-      image: "https://alurakut.vercel.app/capa-comunidade-01.jpg",
-    },
-  ]);
-  console.log(comunidades);
+  const [comunidades, setComunidades] = React.useState([]);
   const githubUser = "GabrielRioo";
   const pessoasFavoritas = [
     "peas",
@@ -73,14 +66,40 @@ export default function Home() {
 
   React.useEffect(function () {
     // 0 - Pegar o array de dados do github
-    fetch(
-      "https://api.github.com/users/GabrielRioo/followers"
-    )
+    fetch("https://api.github.com/users/GabrielRioo/followers")
       .then(function (respostaDoServidor) {
         return respostaDoServidor.json();
       })
       .then(function (respostaCompleta) {
-        setSeguidores(respostaCompleta)
+        setSeguidores(respostaCompleta);
+      });
+
+    fetch("https://graphql.datocms.com/", {
+      method: "POST",
+      headers: {
+        'Authorization': "35cadc1f638ee0c8cdcc0cc4bde82f",
+        "Content-Type": "application/json",
+        'Accept': "application/json",
+      },
+      body: JSON.stringify({
+        "query": `query {
+        allCommunities {
+          id
+          title
+          imageUrl
+          creatorSlug
+        }  
+      }
+      `,
+      }),
+    })
+      .then((response) => response.json())
+      .then((respostaCompleta) => {
+        const comunidadesVindasDoDato = respostaCompleta.data.allCommunities;
+        
+        console.log(comunidadesVindasDoDato);
+        setComunidades(comunidadesVindasDoDato);
+
       });
   }, []);
 
@@ -150,8 +169,8 @@ export default function Home() {
               {comunidades.map((itemAtual) => {
                 return (
                   <li key={itemAtual.id}>
-                    <a href={`/users/${itemAtual.title}`}>
-                      <img src={itemAtual.image} />
+                    <a href={`/users/${itemAtual.id}`}>
+                      <img src={itemAtual.imageUrl} />
                       <span>{itemAtual.title}</span>
                     </a>
                   </li>
