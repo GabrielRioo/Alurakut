@@ -2,10 +2,11 @@ import next from "next";
 import React from "react";
 // Hook do React
 import { useRouter } from "next/router";
+import nookies from 'nookies';
 
 export default function LoginScreen() {
   const router = useRouter();
-  const [githubUser, setGithubUser] = React.useState('GabrielRioo'); 
+  const [githubUser, setGithubUser] = React.useState("GabrielRioo");
 
   return (
     <main
@@ -35,30 +36,45 @@ export default function LoginScreen() {
         </section>
 
         <section className="formArea">
-          <form className="box" onSubmit={(e) => {
-                e.preventDefault();
-                // alert("Alguém clicou no botão.");
-                console.log('Usuario: ', githubUser)
-                router.push('/',  {
+          <form
+            className="box"
+            onSubmit={(e) => {
+              e.preventDefault();
+              // alert("Alguém clicou no botão.");
+              console.log("Usuario: ", githubUser);
 
-                })}}>
+              fetch("https://alurakut.vercel.app/api/login", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ githubUser: "GabrielRioo" }),
+              }).then(async (respostaDoServer) => {
+                const dadosDaResposta = await respostaDoServer.json();
+
+                const token = dadosDaResposta.token
+                nookies.set(null, 'USER_TOKEN', token, {
+                    path: '/',
+                    maxAge: 86400 * 7
+                })
+
+                router.push("/");
+              });
+            }}
+          >
             <p>
               Acesse agora mesmo com seu usuário do <strong>GitHub</strong>!
             </p>
-            <input 
-                placeholder="Usuário" 
-                value={githubUser} 
-                onChange={(e) => {
-                    console.log(e.target.value)
-                    setGithubUser(e.target.value)
-                }}
-                />
-                {githubUser.length === 0 ? 'Preencha o campo' : ''}
-            <button
-              type="submit"
-            >
-              Login
-            </button>
+            <input
+              placeholder="Usuário"
+              value={githubUser}
+              onChange={(e) => {
+                console.log(e.target.value);
+                setGithubUser(e.target.value);
+              }}
+            />
+            {githubUser.length === 0 ? "Preencha o campo" : ""}
+            <button type="submit">Login</button>
           </form>
 
           <footer className="box">
